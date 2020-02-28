@@ -1,0 +1,63 @@
+-----------------------------------
+2020/02/02 17:59:21
+Graph : data\graph_08.json
+Number of level : 62.
+Size of grid : 100000*100000.
+ Init : 7010
+ End :  3431
+-----------------------------------
+2020/02/02 18:01:37
+Graph : data\graph_08.json
+Number of level : 62.
+Size of grid : 100000*100000.
+ Init : 7000
+ End :  2890
+-----------------------------------
+2020/02/02 18:01:52
+Graph : data\graph_07.json
+Number of level : 2.
+Size of grid : 100000*100000.
+ Init : 3368
+ End :  1232
+-----------------------------------
+2020/02/02 18:01:59
+Graph : data\graph_05.json
+Number of level : 26.
+Size of grid : 70*70.
+ Init : 534
+ End :  32
+-----------------------------------
+2020/02/02 23:35:35
+Graph : ./data/graph_05.json
+Number of level : 26.
+Size of grid : 70*70.
+ Init : 534
+ End :  32
+-----------------------------------
+2020/02/02 23:38:36
+Graph : ./data/graph_05.json
+Number of level : 26.
+Size of grid : 70*70.
+ Init : 534
+ End :  32
+-----------------------------------
+2020/02/02 23:40:49
+Graph : ./data/graph_04.json
+Number of level : 16.
+Size of grid : 50*50.
+ Init : 180
+ End :  28
+-----------------------------------
+2020/02/02 23:43:02
+Graph : ./data/graph_04.json
+Number of level : 16.
+Size of grid : 50*50.
+ Init : 180
+ End :  29
+-----------------------------------
+2020/02/02 23:43:15
+Graph : ./data/graph_05.json
+Number of level : 26.
+Size of grid : 70*70.
+ Init : 534
+ End :  32

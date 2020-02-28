@@ -1,0 +1,242 @@
+-----------------------------------
+2020/02/02 12:37:22
+Graph : data/graph_02.json
+Number of level : 16.
+Size of grid : 20*20.
+Results : 
+
+Force directed :
+Init : 157
+End :  35
+Time used : 15ms.
+
+Local Transverse :
+Init : 157
+End :  144
+Time used : 7ms.
+
+Local Markov :
+Init : 157
+End :  33
+Time used : 476ms.
+
+-----------------------------------
+2020/02/02 12:37:36
+Graph : data/graph_03.json
+Number of level : 17.
+Size of grid : 40*40.
+Results : 
+
+Force directed :
+Init : 390
+End :  136
+Time used : 13ms.
+
+Local Transverse :
+Init : 390
+End :  76
+Time used : 9ms.
+
+Local Markov :
+Init : 390
+End :  24
+Time used : 98ms.
+
+-----------------------------------
+2020/02/02 12:37:47
+Graph : data/graph_04.json
+Number of level : 16.
+Size of grid : 50*50.
+Results : 
+
+Force directed :
+Init : 180
+End :  30
+Time used : 25ms.
+
+Local Transverse :
+Init : 180
+End :  60
+Time used : 12ms.
+
+Local Markov :
+Init : 180
+End :  38
+Time used : 51ms.
+
+-----------------------------------
+2020/02/02 12:37:56
+Graph : data/graph_05.json
+Number of level : 26.
+Size of grid : 70*70.
+Results : 
+
+Force directed :
+Init : 534
+End :  32
+Time used : 31ms.
+
+Local Transverse :
+Init : 534
+End :  47
+Time used : 26ms.
+
+Local Markov :
+Init : 534
+End :  33
+Time used : 735ms.
+
+-----------------------------------
+2020/02/02 12:38:11
+Graph : data/graph_06.json
+Number of level : 9.
+Size of grid : 100*100.
+Results : 
+
+Force directed :
+Init : 447
+End :  447
+Time used : 88ms.
+
+Local Transverse :
+Init : 447
+End :  447
+Time used : 11ms.
+
+Local Markov :
+Init : 447
+End :  494
+Time used : 4328ms.
+
+-----------------------------------
+2020/02/02 12:38:29
+Graph : data/graph_07.json
+Number of level : 2.
+Size of grid : 100000*100000.
+Results : 
+
+Force directed :
+Init : 3368
+End :  2817
+Time used : 78ms.
+
+Local Transverse :
+Init : 3368
+End :  2003
+Time used : 223ms.
+
+Local Markov :
+Init : 3368
+End :  2031
+Time used : 3669ms.
+
+-----------------------------------
+2020/02/02 12:39:39
+Graph : data/graph_08.json
+Number of level : 62.
+Size of grid : 100000*100000.
+Results : 
+
+Force directed :
+Init : 6323
+End :  2643
+Time used : 140ms.
+
+Local Transverse :
+Init : 6914
+End :  5966
+Time used : 495ms.
+
+Local Markov :
+Init : 6895
+End :  5592
+Time used : 54278ms.
+
+-----------------------------------
+2020/02/02 12:40:14
+Graph : data/graph_09.json
+Number of level : 18.
+Size of grid : 1000000*1000000.
+Results : 
+
+Force directed :
+Init : 1186
+End :  1186
+Time used : 229ms.
+
+Local Transverse :
+Init : 1132
+End :  789
+Time used : 411ms.
+
+Local Markov :
+Init : 1195
+End :  281
+Time used : 14094ms.
+
+-----------------------------------
+2020/02/02 12:41:43
+Graph : data/graph_10.json
+Number of level : 180.
+Size of grid : 1000000*1000000.
+Results : 
+
+Force directed :
+Init : 20392
+End :  19972
+Time used : 984ms.
+
+Local Transverse :
+Init : 20252
+End :  20145
+Time used : 222ms.
+
+Local Markov :
+Init : 19580
+End :  11391
+Time used : 74429ms.
+
+-----------------------------------
+2020/02/02 08:47:31
+Graph : data/graph_11.json
+Number of level : 259.
+Size of grid : 1000000*1000000.
+Results :
+
+Force directed :
+Init : 104504
+End :  104504
+Time used : 10724ms.
+
+Local Transverse :
+Init : 103467
+End :  102816
+Time used : 4232ms.
+
+Local Markov :
+Init : 103922
+End :  105463
+Time used : 25033482ms.
+
+-----------------------------------
+2020/02/02 12:30:24
+Graph : data/graph_12.json
+Number of level : 21.
+Size of grid : 1000000*1000000.
+Results :
+
+Force directed :
+Init : 929416
+End :  929416
+Time used : 14784ms.
+
+Local Transverse :
+Init : 929002
+End :  927373
+Time used : 4981ms.
+
+Local Markov :
+Init : 929314
+End :  682485
+Time used : 5083704ms.
+

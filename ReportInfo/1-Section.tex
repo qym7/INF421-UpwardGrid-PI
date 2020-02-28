@@ -1,0 +1,84 @@
+%how to cite
+%\cite{Seow2011}
+%how to add figure
+
+\newpage
+\textit{}
+\section{Graph structure, validity, and the crossing number}
+Here, we study the layout of a directed graph : straight-line upward grid drawing. Our task is to generate a valid layout of this kind for a given directed graph, and then try to reduce the number of intersections in this layout. 
+In this section, we are going to introduce the definition of this kind of drawing and then, give our methods of verifying the validity of a graph layout, of computing the number of intersections, and of generating an initial valid layout.  
+%The names of useful interfaces will be given in the end. 
+
+
+
+
+\subsection{Definition of straight-line upward grid drawing}
+Given a directed acyclic graph $G = (V, E)$, we note the number of its vertices $|V|$ by $n$, and the number of arcs (i.e., directed edges) $|E|$ by $m$.
+
+A valid \textit{straight-line upward grid drawing}\cite{contest2020} is a graph layout satisfying:
+\begin{enumerate}
+    \item For each edge, the target vertex has a strictly higher $y$-coordinate than the source vertex;
+
+    \item Two edges $(u, v)$ and $(a, b)$ not sharing an endpoint may cross: but their intersection must be a single interior point of the image segments corresponding to $(u, v)$ and $(a, b)$; 
+
+    \item If two edges $(u, v)$ and $(w, v)$ share a vertex $v$, then the intersection of their images must be a single point (the image of $v$);
+
+    \item The graph is embedded on the input grid: the $x$-coordinate and $y$-coordinate of the vertices must be integers on a grid of size $[0..width] \times [1..height]$, where width and height are two integer parameters provided as input of the problem.
+\end{enumerate}
+
+
+
+
+\subsection{Method to verify the validity}
+
+In the interface class \lstinline{UpgridDrawing}, we have implemented the method\\
+\lstinline{boolean checkValidity()} that checks the validity of our layout.
+
+Firstly, we verify whether all the vertices are in the specified range, i.e. $[0, \dots, \text{width}] \times [0, \dots, \text{height}]$, to check the condition 4. This process has a complexity of $O(n)$.
+
+Then, we invoke the interface \lstinline{boolean isValid()} defined in the class \lstinline{DirectedGraph}. This method iterates through the list of all vertices, and checks whether condition 1 is satisfied. Each iteration has a cost $s_i$, where $s_i = |\text{Succ}(v_i)|$, is the number of successors of vertex $i$. In this iteration, it also traverse the list of edges, to check whether the condition 2 and 3 are satisfied. Each iteration has a cost $m$.
+
+Therefore, over method of checking the validity has a complexity $O(mn)$.
+
+%The first step is to see if all successors of a point have a higher position in the graph. Then we find that the superposition of two edges can be concluded in another necessary condition that one point can not situate inside an edge which doesn't come from or point to it. For this reason, we use simply a loop of edges to check if every point is valid in this way. (One important remark is that we use a loop of edges and then points instead of conversely. This is to prevent checking one point repeatedly).
+
+
+\subsection{Method to get the number of crossings}
+We have implemented the method \lstinline{int computeCrossing()} that returns the number of crossings in the layout. 
+This method invokes the interface \lstinline{int numGraphIntersected()} defined in the class \lstinline{DirectedGraph}. 
+
+This functions has a complexity of $O(m^2)$ to verify all the pairs of edges $\{e_1, e_2\}$ whether $e_1$ and $e_2$ are intersected. 
+Particularly, it does not just return the total number of crossings, but also stores in each edge $e$ the number of intersections caused by this edge. This attribute can be used farther in the local optimization process.
+
+
+
+
+\subsection{Two main classes and corresponding interfaces}
+
+We defined the class \lstinline{DirectedGraph} to deal with the structure of our graph. 
+In this class, there are four members. 
+The \lstinline{vertices} of type \lstinline{ArrayList<Node>} stores all the vertices in this graph, 
+the \lstinline{labelMap} of type \lstinline{HashMap<String, Node>} maps a label to the vertex corresponding, 
+the \lstinline{edges} of type \lstinline{ArrayList<Edge>} stores all the edges in this graph, 
+and \lstinline{level_list} of type \lstinline{ArrayList<List<Node>>} stores the vertices based on their level that we classified.
+
+Since we developed in the base of structure given in the file \lstinline{src.zip}, there are several interfaces already implemented in the class \lstinline{DirectedGraph} that are used to construct the graph from a \lstinline{json} file, but are not related to our implementation, we will not introduce them. 
+
+Another useful class is \lstinline{UpwardDrawing} in \lstinline{Visual} package. 
+This class stores a given directed graph with its layout, as well as the width and height information.
+This class is used as the interface that the users can invoke our methods. Each method that we have implemented has a corresponding interface in this class. 
+The principal interfaces are:
+\begin{itemize}
+    \item \lstinline{boolean checkValidity()}, to check whether this layout is valid.
+    \item \lstinline{void computeValidInitialLayout()}, to generate a valid drawing if it is invalid.
+    \item \lstinline{int computeCrossings()}, to return the number of crossings.
+    \item \lstinline{void forceDirectedHeuristic()}, to process the force-directed drawing to reduce the number of crossings.
+    \item \lstinline{void localSearchHeuristic()}, to use the simulation anealing method to reduce the number of crossings.
+    \item \lstinline{void localSearchHeuristicNode(int tol)}, to use the local optimization process on vertices to reduce the number of crossings.
+\end{itemize}
+\quad
+
+%The main interfaces that we have implemented are \lstinline{boolean isValide()} which gives the judgement whether this graph is valide or not where we use  \lstinline{boolean hasIn(node.p)} in the class Edge to verify the second condition mentioned above. 
+
+% \lstinline{numGraphIntersected()} which computes the number of intersections in the graph, \lstinline{allocateRandom(int width, int height)} which allocates randomly nodes into a valid graph of size $height \times width$ and \lstinline{getEdgeIntersection(Edge edge_tar)} which returns the number of intersections of a certain edge.
+

@@ -1,0 +1,46 @@
+% \newpage
+\section{Generation of a valid graph}
+\label{chapter2}
+\textit{}
+%---- the scope of this chapter}}
+
+In this section, we talk about the method of generating an initial valid layout. 
+
+The process of generating is mainly in two steps. 
+Firstly, we classify the vertices topologically, and label each of them with a attribute level. 
+Secondly, we arrange the vertices having the same level.
+
+\subsection{Classification of vertices}
+%Firstly we try to meet the simplest condition which ensures the upward direction. To realise this condition, we classified all the points by the number of layers of its predecessors, for example, the layer $0$ is composed by all the points without predecessors, the layer $i$ is composed by points whose predecessors can only be found in layer $k$ where $k<i$. Supposed that we have n layers in the end, the graph will be separated into n parts in axis $y$, and the layer $i$ will be allocated in the row $ y = i\times{height}/n$. 
+Firstly, we define inductively the attribute level in the vertices set, and therefore the classification of vertices based on their level:
+
+\noindent\textbf{DEFINITION} : \\
+Let $L_k$ denotes the set of all vertices whose level is $k$.\\
+For a vertex $v\in V$,
+\begin{enumerate}
+    \item If $\text{Pred}(v) = \emptyset$, we define that level$(v)$ = 0. i.e., $L_0 = \{v\in V | \text{Pred}(v) = \emptyset \}$.
+    \item Have defined $L_k$, we let $L_{k+1} = \{v \in \text{Succ}(L_k) | \text{Pred}(v) \subset \bigcup_{i=0}^{k}L_i\}$.
+\end{enumerate}
+
+We can easily prove that this definition is rational. i.e., $\forall v \in V$, $\exists! k \in \mathbb{N}$, s.t. $v \in L_k$.
+
+Since the definition is inductive, we can do the process of classification also inductively. 
+In the method \lstinline{void nodeClassifier()} defined in the class \lstinline{DirectedGraph}, we firstly find all vertices of level $0$ by traversing the list of vertices and labeling $v$ as level $0$ if \lstinline{v.successors} is empty, and add $v$ to the list \lstinline{level_k_list}. This process has a cost $O(n)$. 
+
+Having labeled all the vertices of level from $0$ to $k$ and stored all the vertices in the list \lstinline{level_k_list}, we traverse all the successors of vertices in this \lstinline{level_k_list}, and find the vertices of level $k+1$ by definition. This iteration has a cost of time $\sum_{v\in L_k}\sum_{w\in \text{Succ}(v)} |\text{Pred}(w)|$. 
+
+Therefore, this process has a total complexity of $O(n) + \sum_{v\in V}\sum_{w\in \text{Succ}(v)} |\text{Pred}(w)| = O(md + n)$, where $d$ is the degree of $G$, i.e., $v = \max_{v\in V} \{|\text{Succ}(v)| + |\text{Pred}(v)|\}$.
+
+
+\subsection{Random allocation in each layer}
+As it is enough complicated to ensure the others conditions of validity, we decided to applique the method of random allocation. 
+That is to say, for the $i$th point in layer $k$ which possesses $l_k$ points in total, we will put it randomly in $x\in{[(i-1)\times{\text{width}/l_k},i\times{\text{width}/l_k}]}$ with a uniform distribution. At last, we check the validity allocation given by this algorithms, where a \lstinline{false} leads to a new generation and a \lstinline{true} will return a valid allocation. 
+%As a confirmation of its complexity, for all the graphs given in this project, algorithm ends by less than $???need to by tested$ times. 
+
+\subsection{Corresponding interfaces}
+To generate the initial valid layout, you can invoke the interface \lstinline{void computeValidInitialLayout()} defined in the class \lstinline{UpwardDrawing}. This interface classifies the vertices, and generate a random allocation by invoking the function \lstinline{allocateRandom()} in class \lstinline{DirectedGraph} if the current layout is not valid. 
+
+The \lstinline{allocateRandom()} function allocates each vertex a $y$ value based on its level, and then in each layer it calls the \lstinline{private void distributeInLevelRandom(List<Node> level_n_list, int width)} function to allocate the $x$ values of these vertices randomly. 
+
+%\lstinline{DirectedGraph} is still the main Class that we use. And the main interfaces are \lstinline{void nodeClassifier()} which classifies all the points by assigns value to its variable \lstinline{level}, \lstinline{void distributeInLevelRandom(List<Node> level_n_list, int width)} which reallocate the variable $x$ and $y$ of every point.
+

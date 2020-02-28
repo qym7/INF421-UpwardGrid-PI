@@ -1,0 +1,188 @@
+
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=12pt, french]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[french]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{cite}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{amssymb}
+
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}  % Use Input in the format of Algorithm  
+\renewcommand{\algorithmicensure}{\textbf{Output:}} % Use Output in the format of Algorithm 
+%------------------------------
+% CODE inline
+%------------------------------
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{xparse}
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\lstset{language=Java,
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  commentstyle=\color{pgreen},
+  keywordstyle=\color{pblue},
+  stringstyle=\color{pred},
+  basicstyle=\ttfamily,
+  %moredelim=[il][\textcolor{pgrey}]{$$},
+  moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+\usepackage{minted}
+
+\NewDocumentCommand{\codeword}{v}
+{%
+    \texttt{\textcolor{blue}{#1}}%
+}
+
+%------------------------------
+% Graphics Path
+%------------------------------
+\graphicspath{{./figures}}
+
+%------------------------------
+% Table
+%------------------------------
+\usepackage{array}
+\usepackage{tabularx}
+%------------------------------
+% Citation
+\usepackage{apacite}
+
+
+\usepackage{float}
+
+\usepackage{blindtext} %for enumarations
+
+\usepackage[]{hyperref}  %link collor
+
+%talbe layout to the right
+%\usepackage[labelfont=bf]{caption}
+%\captionsetup[table]{labelsep=space,justification=raggedright,singlelinecheck=off}
+%\captionsetup[figure]{labelsep=quad}
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+%\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+
+\setlength\parskip{4pt}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{École Polytechnique} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge  Report Of Project : \\
+\huge  Graph Drawing Contest 2020\\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+\author{Benxin ZHONG and Yiming QIN} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+%\nocite{*}
+\maketitle % Print the title
+\thispagestyle{empty}
+
+\newpage
+\begin{abstract}
+\thispagestyle{empty}
+{\noindent{\Large Abstract} }
+\\
+\newline
+
+
+The next edition of the Annual Graph Drawing Contest shall take place in late September 2020 during the 28th International Symposium on Graph Drawing (GD 2020, Vancouver, CA), one of leading conferences in the domain of graph drawing and network visualization.
+In the 2020 edition (as for the 2019), the problem to solve will concern the computation of upward drawings of directed acyclic graphs on an integer grid.
+
+In our project, we have defined the class \lstinline{DirectedGraph} to store the graph.
+We defined a method to verify whether one layout of the graph is valid or not with the time complexity $O(mn)$. Then, we defined the method to generate an initial valid layout using topology sorting and random method, with the complexity $O(md + n)$. 
+
+In section 3, we developed the class \lstinline{FDGraphDrawing}, in which we implemented the method to reduce the number of intersections based on the Force-Directed Drawing method. This method has a complexity $O(m+n)$ in each step. It terminates when the derived step length is blow a given tolerance. 
+
+In section 4, we developed two classes, \lstinline{LocalSearchHeuristic} \\
+and \lstinline{LocalHeuristicByNode}, which implement respectively the local optimization method of simulation annealing based on Markov progress, and the optimization of local traversal. 
+\\
+\\
+\textbf{Key words:} Directed Graph, Graph Drawing Contest, Force Directed Graph Drawing, Markov Process, Simulation Annealing.
+    
+\end{abstract}
+
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\clearpage
+\setcounter{page}{1}
+
+%----------------------------------------------------------------------------------------
+%	Section 1
+%----------------------------------------------------------------------------------------
+\input{1-Section.tex}
+
+%----------------------------------------------------------------------------------------
+%	Section 2
+%----------------------------------------------------------------------------------------
+
+\input{2-Section.tex}
+
+\input{3-Section.tex}
+
+\input{4-Section.tex}
+
+\input{5-Section.tex}
+
+%bibliography
+\newpage
+\bibliography{ref.bib}
+\bibliographystyle{apacite}
+
+\end{document}
+
+

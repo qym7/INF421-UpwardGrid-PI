@@ -1,0 +1,125 @@
+% \newpage
+\section{Local optimization methods}
+\label{chapter 4}
+
+\textit{}
+%---- the scope of this chapter}}
+We observe that for some graph, like graph 3 and graph 9, even the complexity of graph is not very high, FD algorithm can not give a satisfying result. That could be caused by the inner structure of the graph, who make edges intertwined driven by external forces. Therefore, we posed other more direct and intuitive methods to solve the problem, which is named as Local Search algorithm. We will call it LS algorithm in the following text. 
+
+% LS = Local Search
+
+\subsection{Intuition of LS algorithm}
+
+How to reduce the total number of intersections in the graph? The most direct idea is similar to the idea of the greedy algorithm. At each step, we find the edge (or point) with the largest number of intersections in the graph, and continuously reduce the number of intersections of this edge by moving the endpoints at both ends of the edge (or the point itself). We call this process local optimization, which is where the algorithm's name comes from. After that, we continue to cycle this process until the number of cycles exceeds a predetermined number of times, or until the convergence condition are met. At this time, the result is considered to be convergent and the program ends.
+
+The core part of this algorithm is the local optimization process. We have also proposed two different algorithms. As can be seen in the results analysis later, their performance on different graphs is also different. Now we will introduce them.
+
+\paragraph{LS algorithm by nodes}
+
+First, let us consider the method of local optimization points. We define the number of intersections of a point as the sum of the intersections of an edge starting from that point or pointing to this point. In addition, we notice that edges are always pointing to higher position, so we need to restrict this point to only move on the $x$ axis. Within the limits of these two, first, we find the point with the largest number of intersections, and we make it iterate through all the positions on the $x$-axis to accurately find the value of the local lowest point. Next we enter a new loop until the results converge, that is to say, until the time when the intersection change is less than a constant after one local optimization process of a certain edge.
+
+We give our algorithm in Algorithm~\ref{alg:simuanneal} on page~\pageref{alg:simuanneal}.
+
+\paragraph{LS algorithm by edges}
+
+However, is the point a unit that is too small? Can this local optimization play a big role in the whole graph? Thus our second natural idea is to expand the local optimization to edges. The basic idea of this method is the same as the previous one, but it is not difficult to find a delicate point. If we want to find the lowest point of an edge by iterating through $x$ axe, the time complexity of each loop is $O (\lstinline{width} ^ 2)$, which for the above one method is only $O (\lstinline{width})$. When $\lstinline{width}$ is very large, it will be catastrophic. Therefore, we decided to implement a virtual annealing process using a Markov chain to approach the lowest point.
+
+How to simulate such a Markov process?
+Our probability space is all positions on the x-axis of the row. Since the points and points cannot overlap, the transition matrix $Q$ corresponding to the Markov process is defined as 0 at the occupied position of the row and the position of $x$ itself. And other positions have the same probability. We also define an acceptance function $R$. $R$ measures the possibility of moving from the current position to a position $ y $. If the value of $R$ is greater than $\frac{1}{2}$, it means that the number of intersections at this $ y $ is less than the current position, and the greater the probability of moving to next position is. If $h = \frac{u}{1+u}$, then $R$ is defined as follows:
+
+$$ R(x, y) = \left\{
+\begin{aligned}
+h(\exp(\frac{1}{T}(V(x)-V(y)))\frac{Q(y,x)}{Q(x,y)}),& \text{ if } Q(x, y) \ne 0 \\
+0,& \text{ if not.}
+\end{aligned}
+\right.
+$$
+
+Then we process in the following way: 
+
+\paragraph{Step 1} Initialize $X0$, which is the original graph (if the graph is not valid, call the generating valid graph function to make it valid)
+\paragraph{Step n} Randomly select y according to $Q (X _n, y)$, and then randomly select $U _ {n + 1}$ in $[0,1]$, if $U _ {n + 1} < R (X _n, y)$, then $X _{n + 1} = y$, otherwise $X _ {n + 1} = X_n$
+
+We give our algorithm in Algorithm~\ref{alg:nodetraversal} on page~\pageref{alg:nodetraversal}.
+
+\begin{algorithm}
+    \caption{Simulated Annealing}
+    \label{alg:simuanneal}
+    \begin{algorithmic}
+    \REQUIRE{\lstinline{max_num_itr, tol, max_num_markov}}
+    \FOR{\lstinline{i} from \lstinline{0} to \lstinline{max_num_itr}}
+        \STATE{\lstinline{edge_max = (u,v)} $\gets$ the edge that causes the largest number of crossings.}
+        \FOR{\lstinline{j} from \lstinline{0} to \lstinline{max_num_markov}}
+            \STATE{\lstinline{w} $\gets$ \lstinline{random_choose(u,v)}}
+            \STATE \lstinline{T_w} $\gets$ \lstinline{C*V_w(w.x)/ln(j)}
+            \STATE{\lstinline{y} $\gets$ \lstinline{random_choose([0,..,width] \ occupied_points)}}
+            \STATE\lstinline{r} $\gets$ \lstinline{random_double(0,1)}, obeying uniform distribution.
+            \IF{\lstinline{r < R(x,y;T_w)}}
+                \STATE \lstinline{w.x} $\gets$ \lstinline{y}
+            \ENDIF
+            \IF{\lstinline{T_u < tol && T_v < tol}}
+                \STATE \lstinline{break loop}
+            \ENDIF
+        \ENDFOR
+    \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{Node Traversal}
+    \label{alg:nodetraversal}
+    \begin{algorithmic}
+    \REQUIRE{\lstinline{tol}}
+    \STATE \lstinline{num_crossing_change} $\gets \inf$ 
+    \WHILE{\lstinline{num_crossing_change > tol}}
+        \STATE \lstinline{vertex_target} $\gets$ the vertex whose edges cause the largest number of crossings.
+        \STATE Traverse all the non-occupied $x$ coordinate values, and find \lstinline{x_0} such that \lstinline{vertex_target.x=x_0} makes the number of crossing minimal. 
+        \STATE \lstinline{vertex_target.x} $\gets$ \lstinline{x_0}
+        \STATE \lstinline{num_crossing_change} $gets$ the change of number of crossing after this loop.
+    \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Complexity and results}
+
+\paragraph{LS algorithm by nodes}
+Here is the complexity of a local optimisation of a node which is given by the interface\lstinline{process()} because the convergence number if not predictable.
+
+The complexity of the whole process is executed for every element in $x$ axe in which we calculate the total number of neighbor points' intersections. As the process of getting number of intersections of an edge consists of a loop of each edge in the graph, so its time complexity is  $O(m)$. Thus we have the time complexity: 
+
+
+
+% $Complexity(process) = O(width) \times (Num(predecessors)+Num(successors))\times Complexity)getEdgeIntersection())$
+
+$$ T = O(\lstinline{width}\times mn)$$
+
+\paragraph{LS algorithm by nodes}
+
+As before, we consider first the time complexity of a local process which includes mainly \lstinline{max_iter} loops for the corresponding edge. In this loop, all concerning operations use constant time. In this way, the local time complexity is:
+
+$$T = O(\lstinline{max_iter})$$
+
+The complete process has not only execute the local process, but also include  an upgrading of the total intersection number (for every edge, its intersection number is calculated here too) and an upgrading of the edge who has most intersections. The time of the first upgrading given by the function \lstinline{numGraphIntersected} is $O(m^2)$ because of two loops of edges. Then the second needs $O(m)$ on using the simplest find-max methode.
+
+So in the end, the complexity of the whole processus is $\lstinline{num_edge_process} \times (O(\lstinline{max_iter})+O(m^2))$. We have:
+
+% $Complexity(numGraphIntersected()) = Complexity(m^2)$
+
+% $Complexity(processEdge(Edge edge, double tol, int max\_iter)) = O(max\_iter) $, note that here the constant may be large.
+
+% $Compexity(process(double tol, int num_edge_process, int max\_iter)) = num_edge_process \times (O(max\_iter)+O(m)+Complexity(numGraphIntersected))$
+
+$$T = O(\lstinline{num_edge_process} \times((\lstinline{max_iter})+m^2))$$
+
+One remark here is that as every time we need to recalculate the number of intersections of each edge, which may lead to a large time complexity.
+
+\subsection{Class and interfaces}
+These two algorithms are in the LocalSearchHeuristic and LocalHeuristicByNode files under the LocalSearch package.
+
+The principal interfaces of them both are:
+\begin{itemize}
+    \item \lstinline{void processEdge/processNode(Edge edge, double tol, int max_iter)}, to get on a local optimisation process.
+    \item \lstinline{void process(double tol, int num_edge_process, int max_iter)}, to generate a valid graph with given parameters.
+\end{itemize}
+\quad

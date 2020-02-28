@@ -1,0 +1,89 @@
+% \newpage
+\section{Forced directed algorithm}
+\label{chapter3}
+
+
+%---- the scope of this chapter}}
+%We introduce here the force-directed (noted as FD) method provided by Mr.HU. 
+In this section, we study the Force-directed drawing method \cite{hu2006}.
+In this method, the vertices of graph are considered as particles in a physical system that moves under the forces on them. 
+We define that there are the attractive forces between the adjacent vertices, and there are repulsive forces between each pair of vertices.
+Then, we simulate the process that the vertices move in this force field, such that the \textit{total energy}, i.e., the summation of squared forces, converges to the minimum, or a local minimum.
+
+%\subsection{Intuition of FD algorithm}
+%In this model, vertices are seen as particles of a physical system that evolves under the action of forces exerced on the vertices. There exist attractive forces (between adjacent vertices) and repulsive forces (for any pair of vertices) acting on vertex u. 
+
+The pseudo-algorithm is provided in the paper \cite{hu2006}. 
+In our project, to preserve the validity condition 1, we modified the algorithm, such that the vertices cannot move but only in its own layer. That means, the $y$ coordinates are fixed, and they move only horizontally. We give our algorithm in Algorithm~\ref{alg:force_directed} on page~\pageref{alg:force_directed}.
+
+But the process can break the other three conditions. In our project, we solve this problem in this way:
+\begin{enumerate}
+    \item Ignore the condition 4. i.e., the $x$ coordinate can be negative or can be above \lstinline{width}.
+    \item After the iteration has finished, we search all vertices breaking condition 2 or 3. i.e., all vertices in on edge of which it is not an endpoint.
+    \item We move the each invalid vertex by 1, with the direction the same as that of the summation force on it.
+    \item Repeat the step 2 and 3, until that there are not vertex breaking condition 2 or 3.
+    \item Shrink the whole layout, such that all $x$ coordinates are in the given range.
+\end{enumerate}
+%^We did some modification in order to fit in the caracters of a directed graph, like moving points only in $x$ axis, add a method to validize our drawing and the modification of $x$ value in the end to prevent out of bounds.
+
+\begin{algorithm}
+    \caption{Generate a graph by FD method}
+    \label{alg:force_directed}
+    \begin{algorithmic}
+    \REQUIRE {\lstinline{max_step_num}, \lstinline{initial_step_length}, \lstinline{tol}}
+    % \ENSURE 
+    \STATE \lstinline{energy_old} $\gets \infty$ 
+    \STATE{\lstinline{step_length} $\gets$ \lstinline{initial_step_length}}
+    \FOR{\lstinline{i = 0, 1, 2, ..., max_step_num} }
+        \IF{\lstinline{step_length < tol}}
+            \STATE{\lstinline{break loop}}
+        \ENDIF
+        \STATE{\lstinline{energy_new} $\gets$ 0\par}
+        \FOR{\lstinline{v} $\in$ \lstinline{vertices}} 
+            \STATE{\lstinline{force(v)} $\gets$ \lstinline{forceTotal(v)}\par
+                \lstinline{energy_new} $\gets$ \lstinline{energy_new + (force(v))}}
+            \STATE{\lstinline{move(v, force(v), step_length)}} 
+        \ENDFOR
+        \STATE \lstinline{step_length} $\gets$ \lstinline{updateStepLength(energy_old, energy_new, step_length)}
+        \STATE \lstinline{energy_old} $\gets$ \lstinline{energy_new}
+    \ENDFOR
+    \STATE Make the layout valid
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection{Modification of parameters}
+In this algorithm, there are several parameters which need to be given. 
+
+\begin{itemize}
+    \item The value of $C$ and $K$ is not important. So we set $C = 1$ and $K = 1$. \cite{hu2006}
+    \item Step is given by a an updating function to avoid tripped by local minimums. \cite{hu2006}
+    \item Tol is set initially to be 1 which showed a good performance. Another converge condition is that the algorithm can loop no more than 4000 times to prevent endless loops.
+\end{itemize}
+
+\subsection{Complexity and results}
+In this process, we call an iteration in the outer loop a \textit{step}. Each step contains a loop of $n$ iterations, and each interation has a complexity $$T_v = O(d_v + n)$$ 
+where $d_v$ is the degree of the vertex $v$, i.e. $d_v = |\text{Succ}(v)| + |\text{Pred}(v)|$.
+
+Each step contains also a process of updating, which has a constant complexity. Thus the total complexity of each step is 
+$$T_i = \sum_{v\in V} T_v = \sum_{v\in V} O(d_v + n) = O(m + n^2)$$
+
+Then we need to estimate the number of steps we make. Based on our \lstinline{updateStepLength} function, and the condition of termination, we have the number of steps is 
+$$N_{\text{step}} = \min\{\lstinline{max_step_num}, \frac{\log(\lstinline{tol/inital_step})}{\log \alpha}\}$$
+where $\alpha$ is a constant. Doing the upper bound estimation, we can take $N_{\text{step}} = \lstinline{max_step_num}$, denoted by $M_\max$.
+
+The process of makeing the layout valid has a complexity $O(n)$, where we do not give the proof. Therefore, the total complexity of the Force-Directed drawing algorithm is 
+$$T = \sum_{i=0}^{M_{\max}}T_i + O(n) = O(M_{\max}(m+n^2))$$
+
+\subsection{Class and interfaces}
+
+For the readability of the project, we created a new package called ForceDirected, which concludes a ForceDirected class. We added the necessary parameters such as energy, C, and K to the class, and implemented the function for reconstructing the graph.
+
+The principal interfaces are:
+\begin{itemize}
+    \item \lstinline{GridVector_2 forceTotal(Node node)}, to calculate the force of a node in the forme of an vector.
+    \item \lstinline{void step()}, to calculate the forces, the energy, and to execute the move of every node for one time.
+    \item \lstinline{forceDirectedProcess(int max_step_num, double initial_step_length, double tol)}, to generate a valid graph with given parameters.
+\end{itemize}
+\quad
